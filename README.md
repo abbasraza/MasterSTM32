@@ -27,25 +27,32 @@ For detailed insights into the STM32 architecture and programming, refer to thes
 
 - Ubuntu
 
+
 ## Installation
+- Download and install [STLINK tools](https://github.com/stlink-org/stlink)  stlink_1.7.0-1_amd64.deb from [here
+](https://github.com/stlink-org/stlink/releases)
+- Install ninja
+```shell
+sudo apt-get install ninja-build
+```
 
 ### 1. Download pre-built ARM bare metal toolchain and untar it from [here](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads/12-2-rel1).
     - x86_64 Linux hosted cross toolchains --> AArch32 bare-metal target (arm-none-eabi) --> arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz
 ### 2. Add the toolchain to your PATH:
-    ```shell
+```shell
     PATH=$PATH:/path_where_downloaded_toolchain/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/
-    ```
+```
 ### 3. Setup Python virtual environment and install Meson:
-    ```shell
+```shell
     python3.10 -m venv meson_venv
     source ../meson_venv/bin/activate
     pip install meson
-    ```
+```
 ### 4. Clone the repository:
-    ```shell
+```shell
     git clone git@github.com:abbasraza/MasterSTM32.git
     cd MasterSTM32
-    ```
+```
 ### 5. Submodules
 
 This project includes the following submodules:
@@ -70,7 +77,7 @@ git submodule init
 git submodule update
 ```
 ### 6. Meson setup (to create ninja build file):
-    ```shell
+```shell
 (meson_venv) abbas@abbas-teo:~/work/MasterSTM32$ meson setup --cross-file cross_file.txt build
 ```
 ```
@@ -104,10 +111,45 @@ MasterSTM32 undefined
 Found ninja-1.10.1 at /usr/bin/ninja
 (meson_venv) abbas@abbas-teo:~/work/MasterSTM32$ 
     
-    ```
+```
 ### 7. Build and flash project to STM32 board:
-    ```shell
+```shell
     cd build/
     ninja
+```
+```
+Output:
+(meson_venv) abbas@abbas-teo:~/work/MasterSTM32/build$ ninja 
+[4/5] Linking target examples/led_blink/led_blink.elf
+/home/abbas/Downloads/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /home/abbas/Downloads/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/softfp/libc_nano.a(libc_a-closer.o): in function `_close_r':
+closer.c:(.text._close_r+0xc): warning: _close is not implemented and will always fail
+/home/abbas/Downloads/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /home/abbas/Downloads/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/softfp/libc_nano.a(libc_a-lseekr.o): in function `_lseek_r':
+lseekr.c:(.text._lseek_r+0x10): warning: _lseek is not implemented and will always fail
+/home/abbas/Downloads/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /home/abbas/Downloads/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/softfp/libc_nano.a(libc_a-readr.o): in function `_read_r':
+readr.c:(.text._read_r+0x10): warning: _read is not implemented and will always fail
+/home/abbas/Downloads/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: /home/abbas/Downloads/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/softfp/libc_nano.a(libc_a-writer.o): in function `_write_r':
+writer.c:(.text._write_r+0x10): warning: _write is not implemented and will always fail
+/home/abbas/Downloads/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld: warning: examples/led_blink/led_blink.elf has a LOAD segment with RWX permissions
+[5/5] Generating examples/led_blink/led_blink.bin with a custom command
+```
+```shell
     ninja flash
-    ```
+```
+```
+Output:
+(meson_venv) abbas@abbas-teo:~/work/MasterSTM32/build$ ninja flash
+[0/1] Running external command flash (wrapped by meson to set env)
+st-flash 1.7.0
+2023-10-16T02:42:41 INFO common.c: F42x/F43x: 256 KiB SRAM, 2048 KiB flash in at least 16 KiB pages.
+file /home/abbas/work/MasterSTM32/build/examples/led_blink/led_blink.bin md5 checksum: 7efce998a56f4a38e5511d45792f765, stlink checksum: 0x000110dc
+2023-10-16T02:42:41 INFO common.c: Attempting to write 1200 (0x4b0) bytes to stm32 address: 134217728 (0x8000000)
+EraseFlash - Sector:0x0 Size:0x4000 2023-10-16T02:42:42 INFO common.c: Flash page at addr: 0x08000000 erased
+2023-10-16T02:42:42 INFO common.c: Finished erasing 1 pages of 16384 (0x4000) bytes
+2023-10-16T02:42:42 INFO common.c: Starting Flash write for F2/F4/F7/L4
+2023-10-16T02:42:42 INFO flash_loader.c: Successfully loaded flash loader in sram
+2023-10-16T02:42:42 INFO flash_loader.c: Clear DFSR
+2023-10-16T02:42:42 INFO common.c: enabling 32-bit flash writes
+2023-10-16T02:42:42 INFO common.c: Starting verification of write complete
+2023-10-16T02:42:42 INFO common.c: Flash written and verified! jolly good!
+(meson_venv) abbas@abbas-teo:~/work/MasterSTM32/build$ 
+```
