@@ -2,6 +2,8 @@
 
 This project focuses on STM32 bare metal programming using the STM32F429I-DISC1 Discovery kit with the STM32F429ZIT6 MCU. The goal is to explore and understand the capabilities of the STM32 Cortex-M4 microcontroller, develop low-level firmware, and gain insight into hardware-level programming. We will use a combination of reference manuals, user guides, and programming manuals to master STM32 bare metal programming.
 
+![STM32F429I-DISC1 Discovery Kit](images/disc1.png)
+![Connection](images/disc1_connect.jpg)
 
 ## Documents for Reference
 
