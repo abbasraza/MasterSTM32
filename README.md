@@ -52,7 +52,7 @@ sudo apt-get install ninja-build
 ```
 ### 4. Clone the repository:
 ```shell
-    git clone git@github.com:abbasraza/MasterSTM32.git
+    git clone https://github.com:abbasraza/MasterSTM32.git
     cd MasterSTM32
 ```
 ### 5. Submodules
